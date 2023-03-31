@@ -222,8 +222,6 @@ while True:
                 print("게임에서 패배했습니다.")
                 quit()
 
-    # 아이템
-
     current_stage_index += 1
     if current_stage_index == len(stages):
         print("모든 스테이지를 클리어했습니다. 게임을 종료합니다.")
