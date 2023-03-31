@@ -2,9 +2,8 @@ import random
 import time
 import os
 
+
 # 모체가 되는 캐릭터 클래스
-
-
 class Character:
     def __init__(self, name, hp, normal_power):
         self.name = name
@@ -12,9 +11,8 @@ class Character:
         self.hp = hp
         self.normal_power = normal_power
 
+
 # 플레이어 클래스
-
-
 class Player(Character):
     def __init__(self, name, hp, sp, normal_power, magic_power):
         super().__init__(name, hp, normal_power)
@@ -47,20 +45,18 @@ class Player(Character):
         self.normal_power += 20
         self.magic_power += 30
 
+
 # 직업 클래스
-
-
 class Job(Player):
     def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
         super().__init__(name, hp, sp, normal_power, skill_power)
         self.skill_cost = skill_cost
         self.dodge = dodge
-    # 일반 공격
 
+    # 일반 공격
     def normal_attack(self, other):
         attack_power = random.randint(
             int(self.normal_power * 0.8), int(self.normal_power * 1.2))
-
         if random.random() < 0.7:
             attack_power *= 2
             other.hp = max(other.hp - attack_power, 0)
@@ -73,9 +69,8 @@ class Job(Player):
             if other.hp == 0:
                 print(f"{other.name}이(가) 쓰러졌습니다.")
 
+
 # 상세 직업. 현재 백수 / 군인 / 의사 / 트레이너 구현됨
-
-
 class WhiteHand(Job):
     def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
         super().__init__(name, hp, sp, normal_power, skill_power, skill_cost, dodge)
