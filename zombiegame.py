@@ -2,18 +2,20 @@ import random
 import time
 import os
 
+# 모체가 되는 캐릭터 클래스
+
 
 class Character:
-
     def __init__(self, name, hp, normal_power):
         self.name = name
         self.max_hp = hp
         self.hp = hp
         self.normal_power = normal_power
 
+# 플레이어 클래스
+
 
 class Player(Character):
-
     def __init__(self, name, hp, sp, normal_power, magic_power):
         super().__init__(name, hp, normal_power)
         self.max_sp = sp
@@ -45,6 +47,8 @@ class Player(Character):
         self.normal_power += 20
         self.magic_power += 30
 
+# 직업 클래스
+
 
 class Job(Player):
     def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
@@ -69,24 +73,75 @@ class Job(Player):
             if other.hp == 0:
                 print(f"{other.name}이(가) 쓰러졌습니다.")
 
+# 상세 직업. 현재 백수 / 군인 / 의사 / 트레이너 구현됨
 
+
+class WhiteHand(Job):
+    def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
+        super().__init__(name, hp, sp, normal_power, skill_power, skill_cost, dodge)
+        self.job_skill_name = "뒹굴뒹굴"
+
+    def job_skill(self):
+        print(f"{self.name}의 {self.job_skill_name} 발동!")
+        time.sleep(1)
+        print(f"{self.name}은 아무것도 하지 않습니다!")
+
+
+class Soldier(Job):
+    def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
+        super().__init__(name, hp, sp, normal_power, skill_power, skill_cost, dodge)
+        self.job_skill_name = "신체 단련"
+
+    def job_skill(self):
+        print(f"{self.name}의 {self.job_skill_name} 발동!")
+        time.sleep(1)
+        self.max_hp += 30
+        print(f"{self.name}의 총 체력치가 30 증가합니다!")
+
+
+class Doctor(Job):
+    def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
+        super().__init__(name, hp, sp, normal_power, skill_power, skill_cost, dodge)
+        self.job_skill_name = "자가 치유"
+
+    def job_skill(self):
+        print(f"{self.name}의 {self.job_skill_name} 발동!")
+        time.sleep(1)
+        self.hp += 30
+        print(f"{self.name}의 현재 체력이 30 회복됩니다!")
+
+
+class Trainer(Job):
+    def __init__(self, name, hp, sp, normal_power, skill_power, skill_cost, dodge):
+        super().__init__(name, hp, sp, normal_power, skill_power, skill_cost, dodge)
+        self.job_skill_name = "전장 트레이닝"
+
+    def job_skill(self):
+        print(f"{self.name}의 {self.job_skill_name} 발동!")
+        time.sleep(1)
+        self.hp += 10
+        self.max_hp += 10
+        print(f"{self.name}의 총 체력치가 10 증가, 현재 체력이 10 회복됩니다!")
+
+
+# 직업 리스트. 주석 처리는 구현 예정
 job_list = [
-    Job("백수", 100, 10, 100, 10, 1, 0.9),
-    Job("소방관", 100, 10, 100, 10, 1, 0.9),
-    Job("경찰관", 100, 10, 100, 10, 1, 0.9),
-    Job("경비원", 100, 10, 100, 10, 1, 0.9),
-    Job("주방장", 100, 10, 100, 10, 1, 0.9),
-    Job("기술자", 100, 10, 100, 10, 1, 0.9),
-    Job("의사", 100, 10, 100, 10, 1, 0.9),
-    Job("트레이너", 100, 100, 10, 10, 1, 0.9),
-    Job("군인", 100, 10, 100, 10, 1, 0.9),
-    Job("선생님", 100, 10, 100, 10, 1, 0.9),
-    Job("학생", 100, 10, 100, 10, 1, 0.9)
+    WhiteHand("백수", 100, 10, 100, 10, 1, 0.9),
+    # Job("소방관", 100, 10, 100, 10, 1, 0.9),
+    # Job("경찰관", 100, 10, 100, 10, 1, 0.9),
+    # Job("경비원", 100, 10, 100, 10, 1, 0.9),
+    # Job("주방장", 100, 10, 100, 10, 1, 0.9),
+    # Job("기술자", 100, 10, 100, 10, 1, 0.9),
+    Doctor("의사", 100, 10, 100, 10, 1, 0.9),
+    Trainer("트레이너", 100, 100, 10, 10, 1, 0.9),
+    Soldier("군인", 100, 10, 100, 10, 1, 0.9),
+    # Job("선생님", 100, 10, 100, 10, 1, 0.9),
+    # Job("학생", 100, 10, 100, 10, 1, 0.9)
 ]
 
 
+# 좀비 클래스
 class Zombie(Character):
-
     def __init__(self, name, hp, normal_power):
         super().__init__(name, hp, normal_power)
 
@@ -107,26 +162,15 @@ class Zombie(Character):
             print(f"좀비가 당신을 물었습니다! hp가 {bite_damage}만큼 달았습니다.")
 
 
+# 스테이지 클래스
 class Stage:
-
     def __init__(self, name, level, zombies):
         self.name = name
         self.level = level
         self.zombies = zombies
 
 
-print("=== 게임 시작 ===")
-print("당신의 직업을 추첨합니다")
-time.sleep(0.5)
-print(".")
-time.sleep(0.5)
-print(".")
-time.sleep(0.5)
-print(".")
-player = random.choice(job_list)
-print(f"당신의 직업은 {player.name}입니다.")
-time.sleep(1)
-
+# 스테이지 리스트
 stages = [
     Stage("stage 1", 1, [Zombie("일반 좀비", 30, 5), Zombie("경찰 좀비", 40, 6)]),
     Stage("stage 2", 2, [Zombie("좀비 3", 50, 7), Zombie("좀비 4", 60, 8)]),
@@ -140,9 +184,23 @@ stages = [
     Stage("stage 10", 10, [Zombie("보스좀비", 500, 50), Zombie("쪼렙 좀비", 30, 5)])
 ]
 
+# 게임 시작 부분
+print("=== 게임 시작 ===")
+print("당신의 직업을 추첨합니다")
+time.sleep(0.5)
+print(".")
+time.sleep(0.5)
+print(".")
+time.sleep(0.5)
+print(".")
+player = random.choice(job_list)
+print(f"당신의 직업은 {player.name}입니다.")
+time.sleep(1)
 
 current_stage_index = 0
+job_skill_count = 1
 
+# 전투 진입 while문
 while True:
     os.system("cls")
     current_stage = stages[current_stage_index]
@@ -170,12 +228,15 @@ while True:
                     continue
                 else:
                     zombie = current_stage.zombies[attack_num-1]
-
-                    action = input("어떤 공격을 사용하시겠습니까? (1: 일반공격, 2: 마법공격) ")
+                    action = input(
+                        f"어떤 공격을 사용하시겠습니까? (1: 일반공격, 2: 마법공격, 3: [{job_skill_count}/1]직업공격) ")
                     if action == "1":
                         player.normal_attack(zombie)
                     elif action == "2":
                         player.magic_attack(zombie)
+                    elif action == "3" and job_skill_count == 1:
+                        player.job_skill()
+                        job_skill_count = 0
                     else:
                         print("잘못된 입력입니다. 다시 입력해주세요.")
                         continue
@@ -195,6 +256,7 @@ while True:
                 print("="*20)
                 print(f"{current_stage.name}을(를) 클리어했습니다!")
                 print("="*20)
+                job_skill_count += 1
                 player.level_up()
                 time.sleep(0.7)
                 print(f"{player.name}의 레벨이 {player.level}로 올라갔습니다.")
